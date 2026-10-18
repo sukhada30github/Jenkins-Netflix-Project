@@ -1,0 +1,759 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VampireFlix | Enter the Night</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --red: #e11d35;
+  --dark-red: #79091b;
+  --bg: #09090d;
+  --card: #151118;
+  --text: #f7eeee;
+  --muted: #b6a7ae;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(ellipse at top right, #4b101d, transparent 45%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.4s, color 0.4s;
+}
+
+header {
+  padding: 22px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #451520;
+  background: #08080ddd;
+}
+
+.logo {
+  color: var(--red);
+  font-family: Georgia, serif;
+  font-size: 32px;
+  text-shadow: 0 0 20px #e11d3566;
+}
+
+.search {
+  padding: 12px 16px;
+  border-radius: 25px;
+  border: 1px solid #63303b;
+  background: #171117;
+  color: white;
+  width: min(350px, 100%);
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.theme-btn {
+  padding: 11px 15px;
+  border-radius: 25px;
+  border: 1px solid var(--red);
+  color: white;
+  background: var(--dark-red);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+}
+
+.hero {
+  margin: 30px 5%;
+  min-height: 340px;
+  padding: 45px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #702031;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  background:
+    linear-gradient(90deg, #08080df5, #10080acc, #26091399),
+    radial-gradient(circle at 85% 40%, #ed183b, #310813 45%, #08080d 75%);
+  box-shadow: 0 15px 50px #0008;
+}
+
+.hero::after {
+  content: "🦇";
+  position: absolute;
+  right: 8%;
+  top: 35px;
+  font-size: clamp(80px, 15vw, 190px);
+  opacity: 0.7;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-18px) rotate(5deg); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.eyebrow {
+  color: #ff5268;
+  letter-spacing: 5px;
+  font-size: 12px;
+}
+
+.hero h1 {
+  font: bold clamp(45px, 7vw, 76px) Georgia, serif;
+  margin: 18px 0;
+  text-shadow: 0 0 25px #e11d3555;
+}
+
+.hero p {
+  color: #d5c5cb;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.primary-btn {
+  background: linear-gradient(120deg, #ed1938, #8d071d);
+  color: white;
+  border: 1px solid #ff435a;
+  border-radius: 8px;
+  padding: 12px 22px;
+}
+
+.section {
+  padding: 15px 5%;
+  margin-bottom: 28px;
+  scroll-margin-top: 20px;
+}
+
+.section h2 {
+  font: 28px Georgia, serif;
+  margin-bottom: 20px;
+}
+
+.section h2 span {
+  color: var(--red);
+}
+
+.filters {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.filter {
+  background: #171118;
+  border: 1px solid #50303a;
+  color: #e8dbe0;
+  padding: 9px 16px;
+  border-radius: 25px;
+}
+
+.filter.active {
+  background: var(--dark-red);
+  border-color: var(--red);
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 20px;
+}
+
+.movie-card {
+  border: 1px solid #392832;
+  background: var(--card);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.movie-card:hover {
+  transform: translateY(-9px) scale(1.02);
+  border-color: var(--red);
+  box-shadow: 0 15px 35px #e11d3526;
+}
+
+.poster {
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 65px;
+  position: relative;
+  background:
+    radial-gradient(circle at center, #8c132b, transparent 55%),
+    linear-gradient(145deg, #35111e, #08080d);
+}
+
+.poster::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #0a080dee, transparent 70%);
+}
+
+.year {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  background: #08080dcc;
+  border-radius: 5px;
+  padding: 5px 8px;
+  font-size: 11px;
+}
+
+.movie-info {
+  padding: 14px;
+}
+
+.genre {
+  font-size: 10px;
+  color: #ff5268;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.movie-info h3 {
+  font: 18px Georgia, serif;
+  margin: 9px 0;
+}
+
+.movie-info p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  min-height: 58px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.card-btn {
+  background: #251019;
+  color: white;
+  border: 1px solid #67303e;
+  border-radius: 6px;
+  padding: 8px;
+  flex: 1;
+}
+
+.card-btn.saved {
+  background: var(--dark-red);
+  color: #fff;
+}
+
+.quick-picks {
+  position: fixed;
+  z-index: 10;
+  right: 18px;
+  bottom: 18px;
+  width: 220px;
+  background: #100c12f5;
+  border: 1px solid var(--red);
+  border-radius: 12px;
+  box-shadow: 0 10px 35px #000a;
+  overflow: hidden;
+}
+
+.quick-title {
+  background: linear-gradient(90deg, #7c0a1e, #290b14);
+  padding: 12px;
+  cursor: grab;
+  display: flex;
+  justify-content: space-between;
+}
+
+.quick-title button {
+  border: none;
+  background: none;
+  color: white;
+}
+
+.quick-body {
+  padding: 13px;
+}
+
+.quick-body p {
+  font-family: Georgia, serif;
+  margin-bottom: 10px;
+}
+
+.quick-item {
+  padding: 9px 0;
+  color: #e5d5dc;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.quick-item:hover {
+  color: #ff5268;
+}
+
+footer {
+  text-align: center;
+  padding: 30px 15px;
+  color: var(--muted);
+  border-top: 1px solid #3c2029;
+  line-height: 1.8;
+}
+
+body.light {
+  --bg: #f0e5e8;
+  --card: #fff8fa;
+  --text: #211219;
+  --muted: #69535c;
+  background: #f0e5e8;
+  color: #211219;
+}
+
+body.light header {
+  background: #fff8fa;
+}
+
+body.light .search {
+  background: white;
+  color: #211219;
+}
+
+body.light .filter {
+  background: white;
+  color: #211219;
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 18px;
+  }
+
+  .logo {
+    font-size: 26px;
+  }
+
+  .hero {
+    margin: 18px;
+    padding: 25px;
+    min-height: 300px;
+  }
+
+  .hero::after {
+    right: 5px;
+    top: 15px;
+    font-size: 75px;
+  }
+
+  .section {
+    padding: 12px 18px;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+  }
+
+  .poster {
+    height: 145px;
+  }
+
+  .movie-info {
+    padding: 10px;
+  }
+
+  .movie-info h3 {
+    font-size: 15px;
+  }
+
+  .quick-picks {
+    width: 175px;
+    right: 8px;
+    bottom: 8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🦇 VampireFlix</div>
+
+  <input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="Search vampire movies..."
+    aria-label="Search movies"
+  >
+
+  <button class="theme-btn" id="themeBtn">
+    ☼ Theme
+  </button>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="eyebrow">FEATURED AFTER DARK</div>
+    <h1 id="heroTitle">DRACULA</h1>
+    <p id="heroDescription">
+      Enter a world of immortal love, haunted castles,
+      forbidden romance, and creatures of the night.
+    </p>
+    <button class="primary-btn" id="exploreBtn">
+      ▶ Explore Movies
+    </button>
+  </div>
+</section>
+
+<section class="section" id="movies">
+  <h2><span>Top</span> Vampire Movies</h2>
+
+  <div class="filters" id="filters">
+    <button class="filter active" data-genre="All">All Movies</button>
+    <button class="filter" data-genre="Gothic Horror">Horror</button>
+    <button class="filter" data-genre="Romance">Romance</button>
+    <button class="filter" data-genre="Action">Action</button>
+    <button class="filter" data-genre="Comedy">Comedy</button>
+    <button class="filter" data-genre="Drama">Drama</button>
+  </div>
+
+  <div class="movie-grid" id="movieGrid"></div>
+  <p id="emptyMessage" hidden>No movies found. Try another search.</p>
+</section>
+
+<section class="section" id="myList">
+  <h2><span>My</span> Watchlist</h2>
+  <div class="movie-grid" id="savedGrid"></div>
+  <p id="savedMessage">Your watchlist is empty. Click ♡ to save a movie.</p>
+</section>
+
+<footer>
+  🦇 VampireFlix — Enter the darkness, discover the legends.<br>
+  Fan-made vampire movie discovery website.
+</footer>
+
+<aside class="quick-picks" id="quickPicks">
+  <div class="quick-title" id="dragHandle">
+    <strong>✥ Quick Picks</strong>
+    <button id="closePicks" aria-label="Close">×</button>
+  </div>
+  <div class="quick-body">
+    <p>Choose your curse</p>
+    <div class="quick-item" data-movie="Bram Stoker's Dracula">🧛 Dracula</div>
+    <div class="quick-item" data-movie="Twilight">🌒 Twilight</div>
+    <div class="quick-item" data-movie="Blade">⚔️ Blade</div>
+    <div class="quick-item" data-movie="What We Do in the Shadows">🦇 Vampire Comedy</div>
+  </div>
+</aside>
+
+<script>
+const movies = [
+  {
+    title: "Bram Stoker's Dracula",
+    year: 1992,
+    genre: "Gothic Horror",
+    symbol: "🧛",
+    desc: "A timeless gothic tale of love, darkness, and an immortal count."
+  },
+  {
+    title: "Interview with the Vampire",
+    year: 1994,
+    genre: "Drama",
+    symbol: "🥀",
+    desc: "An immortal vampire reveals the beauty and pain of eternal life."
+  },
+  {
+    title: "Twilight",
+    year: 2008,
+    genre: "Romance",
+    symbol: "🌒",
+    desc: "A human and a vampire discover a dangerous, unforgettable love."
+  },
+  {
+    title: "Blade",
+    year: 1998,
+    genre: "Action",
+    symbol: "⚔️",
+    desc: "A half-vampire hunter battles the hidden vampire underworld."
+  },
+  {
+    title: "What We Do in the Shadows",
+    year: 2014,
+    genre: "Comedy",
+    symbol: "🦇",
+    desc: "Vampire roommates struggle with modern life and ancient habits."
+  },
+  {
+    title: "Van Helsing",
+    year: 2004,
+    genre: "Action",
+    symbol: "🏰",
+    desc: "A legendary hunter faces Dracula and other supernatural monsters."
+  },
+  {
+    title: "Queen of the Damned",
+    year: 2002,
+    genre: "Drama",
+    symbol: "👑",
+    desc: "A vampire musician awakens a powerful ancient queen."
+  },
+  {
+    title: "30 Days of Night",
+    year: 2007,
+    genre: "Gothic Horror",
+    symbol: "❄️",
+    desc: "A remote town faces a terrifying month without sunlight."
+  },
+  {
+    title: "Underworld",
+    year: 2003,
+    genre: "Action",
+    symbol: "🌑",
+    desc: "A vampire warrior becomes caught in an ancient supernatural war."
+  },
+  {
+    title: "A Girl Walks Home Alone at Night",
+    year: 2014,
+    genre: "Romance",
+    symbol: "🌙",
+    desc: "A mysterious vampire roams a lonely, dreamlike city at night."
+  }
+];
+
+let selectedGenre = "All";
+let savedMovies = new Set();
+
+const movieGrid = document.getElementById("movieGrid");
+const savedGrid = document.getElementById("savedGrid");
+const search = document.getElementById("search");
+
+function createCard(movie) {
+  const saved = savedMovies.has(movie.title);
+
+  return `
+    <article class="movie-card">
+      <div class="poster">
+        <span class="year">${movie.year}</span>
+        <span>${movie.symbol}</span>
+      </div>
+
+      <div class="movie-info">
+        <div class="genre">${movie.genre}</div>
+        <h3>${movie.title}</h3>
+        <p>${movie.desc}</p>
+
+        <div class="card-actions">
+          <button class="card-btn"
+            data-watch="${movie.title}">
+            ▶ Details
+          </button>
+
+          <button class="card-btn ${saved ? "saved" : ""}"
+            data-save="${movie.title}"
+            aria-label="Toggle favorite">
+            ${saved ? "♥" : "♡"}
+          </button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderMovies() {
+  const query = search.value.toLowerCase().trim();
+
+  const filtered = movies.filter(movie => {
+    const genreMatch =
+      selectedGenre === "All" ||
+      movie.genre === selectedGenre;
+
+    const textMatch =
+      `${movie.title} ${movie.genre} ${movie.year} ${movie.desc}`
+        .toLowerCase()
+        .includes(query);
+
+    return genreMatch && textMatch;
+  });
+
+  movieGrid.innerHTML = filtered.map(createCard).join("");
+
+  document.getElementById("emptyMessage").hidden =
+    filtered.length > 0;
+
+  const saved = movies.filter(movie =>
+    savedMovies.has(movie.title)
+  );
+
+  savedGrid.innerHTML = saved.map(createCard).join("");
+
+  document.getElementById("savedMessage").style.display =
+    saved.length ? "none" : "block";
+}
+
+document.getElementById("filters").addEventListener("click", event => {
+  const button = event.target.closest("[data-genre]");
+  if (!button) return;
+
+  selectedGenre = button.dataset.genre;
+
+  document.querySelectorAll(".filter").forEach(filter => {
+    filter.classList.toggle("active", filter === button);
+  });
+
+  renderMovies();
+});
+
+search.addEventListener("input", renderMovies);
+
+document.addEventListener("click", event => {
+  const saveButton = event.target.closest("[data-save]");
+
+  if (saveButton) {
+    const title = saveButton.dataset.save;
+
+    if (savedMovies.has(title)) {
+      savedMovies.delete(title);
+    } else {
+      savedMovies.add(title);
+    }
+
+    renderMovies();
+    return;
+  }
+
+  const watchButton = event.target.closest("[data-watch]");
+
+  if (watchButton) {
+    const movie = movies.find(m =>
+      m.title === watchButton.dataset.watch
+    );
+
+    alert(
+      `${movie.title} (${movie.year})\n\n` +
+      `${movie.genre}\n\n${movie.desc}\n\n` +
+      "Demo website: no streaming service is connected."
+    );
+  }
+});
+
+document.getElementById("themeBtn").addEventListener("click", () => {
+  document.body.classList.toggle("light");
+});
+
+document.getElementById("exploreBtn").addEventListener("click", () => {
+  document.getElementById("movies").scrollIntoView({
+    behavior: "smooth"
+  });
+});
+
+document.querySelectorAll("[data-movie]").forEach(item => {
+  item.addEventListener("click", () => {
+    const title = item.dataset.movie;
+    const movie = movies.find(m => m.title === title);
+
+    if (movie) {
+      search.value = movie.title;
+      selectedGenre = "All";
+
+      document.querySelectorAll(".filter").forEach(filter => {
+        filter.classList.toggle(
+          "active",
+          filter.dataset.genre === "All"
+        );
+      });
+
+      renderMovies();
+      document.getElementById("movies").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+  });
+});
+
+// Close the floating Quick Picks panel.
+document.getElementById("closePicks").addEventListener("click", () => {
+  document.getElementById("quickPicks").style.display = "none";
+});
+
+// Make Quick Picks draggable with mouse or touch.
+const panel = document.getElementById("quickPicks");
+const handle = document.getElementById("dragHandle");
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+let dragging = false;
+
+handle.addEventListener("pointerdown", event => {
+  if (event.target.closest("button")) return;
+
+  const rect = panel.getBoundingClientRect();
+
+  dragOffsetX = event.clientX - rect.left;
+  dragOffsetY = event.clientY - rect.top;
+
+  panel.style.left = rect.left + "px";
+  panel.style.top = rect.top + "px";
+  panel.style.right = "auto";
+  panel.style.bottom = "auto";
+
+  dragging = true;
+  handle.setPointerCapture(event.pointerId);
+});
+
+handle.addEventListener("pointermove", event => {
+  if (!dragging) return;
+
+  const x = Math.max(
+    0,
+    Math.min(innerWidth - panel.offsetWidth,
+      event.clientX - dragOffsetX)
+  );
+
+  const y = Math.max(
+    0,
+    Math.min(innerHeight - panel.offsetHeight,
+      event.clientY - dragOffsetY)
+  );
+
+  panel.style.left = x + "px";
+  panel.style.top = y + "px";
+});
+
+handle.addEventListener("pointerup", () => {
+  dragging = false;
+});
+
+handle.addEventListener("pointercancel", () => {
+  dragging = false;
+});
+
+renderMovies();
+</script>
+
+</body>
+</html>
+
